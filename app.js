@@ -1,6 +1,6 @@
-// if (process.env.NODE_ENV != "production") {
-//     require ('dotenv').config();
-// }
+if (process.env.NODE_ENV != "production") {
+    require ('dotenv').config();
+}
 
 const express = require("express");
 const app = express();
@@ -20,19 +20,18 @@ const listingRoute = require ("./routes/listing.js");
 const userRoute = require("./routes/user.js");
 const dbUrl = process.env.DB_URL;
 
-// const store = MongoStore.create({ mongoUrl : dbUrl ,
-//      crypto : { secret : process.env.SECRET },
-//      touchAfter : 24*60*60 ,
-// })
+const store = MongoStore.create({ mongoUrl : dbUrl ,
+     crypto : { secret : process.env.SECRET },
+     touchAfter : 24*60*60 ,
+})
 
-// store.on("error", () => {
-//     console.log("ERROR in mongo session store", err);
-// })
+store.on("error", () => {
+    console.log("ERROR in mongo session store", err);
+})
 
 const sessionOptions = {
-    // store : store,
-    // secret: process.env.SECRET,
-    secret:"jbhbnkkhh", 
+    store : store,
+    secret: process.env.SECRET,
     resave: false,
      saveUninitialized: true,
       cookie: {
@@ -54,7 +53,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 
 
 async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/edits");
+    await mongoose.connect(dbUrl);
 };
 
 main().then(() => {
